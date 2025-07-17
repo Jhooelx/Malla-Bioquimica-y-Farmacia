@@ -18,9 +18,8 @@
     }
     .semestres {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 15px;
-      overflow-x: auto;
     }
     .semestre {
       background: white;
@@ -64,11 +63,6 @@
       margin-left: 6px;
       z-index: 10;
     }
-    @media (max-width: 900px) {
-      .semestres {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      }
-    }
   </style>
 </head>
 <body>
@@ -100,8 +94,68 @@
         { id: "QI", nombre: "Química Inorgánica", req: ["QG2"] },
         { id: "PARA", nombre: "Parasitología", req: ["ANA"] },
         { id: "EST", nombre: "Estadística", req: ["CAL2"] }
+      ],
+      "4": [
+        { id: "BOT", nombre: "Botánica", req: ["PARA"] },
+        { id: "FQ1", nombre: "Fisicoquímica I", req: ["FIS2", "QI"] },
+        { id: "BQ1", nombre: "Bioquímica I", req: ["QO1"] },
+        { id: "QA2", nombre: "Química Analítica II", req: ["QA1"] },
+        { id: "QO2", nombre: "Química Orgánica II", req: ["QO1"] },
+        { id: "DISEXP", nombre: "Diseño Experimental", req: ["EST"] }
+      ],
+      "5": [
+        { id: "MICROG", nombre: "Microbiología General", req: ["FISIO"] },
+        { id: "BQ2", nombre: "Bioquímica II", req: ["BQ1"] },
+        { id: "TOXI", nombre: "Toxicología", req: ["FISIO"] },
+        { id: "QAI1", nombre: "Química Analítica Instrumental I", req: ["QA2"] },
+        { id: "FARMACOG", nombre: "Farmacognosia", req: ["BOT"] },
+        { id: "FARMACO1", nombre: "Farmacología I", req: ["BQ1"] },
+        { id: "FQ2", nombre: "Fisicoquímica II", req: ["FQ1"] }
+      ],
+      "6": [
+        { id: "FARMACO2", nombre: "Farmacología II", req: ["FARMACO1"] },
+        { id: "PRODNAT", nombre: "Productos Naturales", req: ["FARMACOG"] },
+        { id: "PPP1", nombre: "Práctica Preprofesional I" },
+        { id: "MICROA", nombre: "Microbiología Aplicada", req: ["MICROG"] },
+        { id: "BIOMOL", nombre: "Biología Molecular", req: ["TOXI"] },
+        { id: "HEMA", nombre: "Hematología", req: ["BQ2"] },
+        { id: "QAI2", nombre: "Química Analítica Instrumental II", req: ["QAI1"] }
+      ],
+      "7": [
+        { id: "VINC1", nombre: "Vinculación I" },
+        { id: "GEN", nombre: "Genética", req: ["BIOMOL"] },
+        { id: "GESTF", nombre: "Gestión Farmacéutica", req: ["PRODNAT"] },
+        { id: "PPP2", nombre: "Práctica Preprofesional II" },
+        { id: "ANCLI", nombre: "Análisis Clínicos", req: ["HEMA"] },
+        { id: "QF1", nombre: "Química Farmacéutica I", req: ["QAI2"] },
+        { id: "FARM", nombre: "Farmacia", req: ["FQ2"] },
+        { id: "BRO1", nombre: "Bromatología I", req: ["PRODNAT"] }
+      ],
+      "8": [
+        { id: "INMUNO", nombre: "Inmunología", req: ["GEN"] },
+        { id: "TECFA1", nombre: "Tecnología Farmacéutica I", req: ["FARM"] },
+        { id: "PPP3", nombre: "Práctica Preprofesional III" },
+        { id: "BQC", nombre: "Bioquímica Clínica", req: ["ANCLI"] },
+        { id: "QF2", nombre: "Química Farmacéutica II", req: ["QF1"] },
+        { id: "FCA", nombre: "Farmacia Clínica y Asistencial", req: ["GESTF"] },
+        { id: "BRO2", nombre: "Bromatología II", req: ["BRO1"] }
+      ],
+      "9": [
+        { id: "FISIOPAT", nombre: "Fisiopatología e Interpretación Clínica", req: ["BQC"] },
+        { id: "ADM", nombre: "Administración", req: ["DISEXP"] },
+        { id: "BIOF", nombre: "Biofarmacia y Farmacocinética", req: ["QF2"] },
+        { id: "TECFA2", nombre: "Tecnología Farmacéutica II", req: ["TECFA1"] },
+        { id: "NUTRI", nombre: "Nutrición", req: ["BRO2"] },
+        { id: "VINC2", nombre: "Vinculación II" },
+        { id: "METINV", nombre: "Metodología de la Investigación", req: ["DISEXP"] }
+      ],
+      "10": [
+        { id: "EPID", nombre: "Epidemiología y Salud Pública", req: ["FISIOPAT"] },
+        { id: "CALIDAD", nombre: "Aseguramiento de la Calidad", req: ["TECFA2"] },
+        { id: "LEGIS", nombre: "Legislación", req: ["ADM"] },
+        { id: "INOC", nombre: "Inocuidad Alimentaria", req: ["NUTRI"] },
+        { id: "TT", nombre: "Trabajo de Titulación" }
       ]
-      // Puedes seguir añadiendo del 4 al 10 igual que los anteriores
     };
 
     const contenedor = document.getElementById("contenedor");
