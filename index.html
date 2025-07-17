@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Malla Bioquímica y Farmacia - UCE</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f6fb;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b4c7e;
+    }
+    .semestres {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+      overflow-x: auto;
+    }
+    .semestre {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+      padding: 10px;
+    }
+    .semestre h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #4a6fa5;
+    }
+    .materia {
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 6px;
+      background: #e8eef8;
+      cursor: pointer;
+      position: relative;
+    }
+    .materia.aprobada {
+      background: #c8e6c9;
+      text-decoration: line-through;
+    }
+    .materia.bloqueada {
+      background: #f3caca;
+      cursor: not-allowed;
+    }
+    .materia:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 100%;
+      top: 0;
+      background: #333;
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      font-size: 12px;
+      margin-left: 6px;
+      z-index: 10;
+    }
+    @media (max-width: 900px) {
+      .semestres {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular - Bioquímica y Farmacia (UCE)</h1>
+  <div class="semestres" id="contenedor"></div>
+
+  <script>
+    const materias = {
+      "1": [
+        { id: "COM", nombre: "Comunicación Oral y Escrita" },
+        { id: "BIOCEL", nombre: "Biología Celular" },
+        { id: "CAL1", nombre: "Cálculo I" },
+        { id: "QG1", nombre: "Química General I" },
+        { id: "FIS1", nombre: "Física I" },
+        { id: "RSC", nombre: "Realidad Socioeconómica" }
+      ],
+      "2": [
+        { id: "EPI", nombre: "Epistemología", req: ["COM"] },
+        { id: "ANA", nombre: "Anatomía e Histología", req: ["BIOCEL"] },
+        { id: "CAL2", nombre: "Cálculo II", req: ["CAL1"] },
+        { id: "QG2", nombre: "Química General II", req: ["QG1"] },
+        { id: "FIS2", nombre: "Física II", req: ["FIS1"] },
+        { id: "BIOET", nombre: "Bioética", req: ["RSC"] }
+      ],
+      "3": [
+        { id: "FISIO", nombre: "Fisiología", req: ["ANA"] },
+        { id: "QA1", nombre: "Química Analítica I", req: ["QG2"] },
+        { id: "QO1", nombre: "Química Orgánica I", req: ["QG2"] },
+        { id: "QI", nombre: "Química Inorgánica", req: ["QG2"] },
+        { id: "PARA", nombre: "Parasitología", req: ["ANA"] },
+        { id: "EST", nombre: "Estadística", req: ["CAL2"] }
+      ]
+      // Puedes seguir añadiendo del 4 al 10 igual que los anteriores
+    };
+
+    const contenedor = document.getElementById("contenedor");
+    const aprobadas = JSON.parse(localStorage.getItem("materiasAprobadas") || "[]");
+
+    function guardarProgreso() {
+      localStorage.setItem("materiasAprobadas", JSON.stringify(aprobadas));
+    }
+
+    function crearMalla() {
+      contenedor.innerHTML = "";
+      for (let s in materias) {
+        const col = document.createElement("div");
+        col.className = "semestre";
+        col.innerHTML = `<h2>Semestre ${s}</h2>`;
+
+        for (let mat of materias[s]) {
+          const div = document.createElement("div");
+          div.className = "materia";
+          div.textContent = mat.nombre;
+          div.dataset.id = mat.id;
+
+          const cumplido = !mat.req || mat.req.every(r => aprobadas.includes(r));
+          const estaAprobada = aprobadas.includes(mat.id);
+
+          if (estaAprobada) {
+            div.classList.add("aprobada");
+          } else if (!cumplido) {
+            div.classList.add("bloqueada");
+            div.dataset.tooltip = "Requiere: " + mat.req.join(", ");
+          }
+
+          div.onclick = () => {
+            if (!div.classList.contains("bloqueada")) {
+              if (aprobadas.includes(mat.id)) {
+                aprobadas.splice(aprobadas.indexOf(mat.id), 1);
+              } else {
+                aprobadas.push(mat.id);
+              }
+              guardarProgreso();
+              crearMalla();
+            }
+          };
+
+          col.appendChild(div);
+        }
+
+        contenedor.appendChild(col);
+      }
+    }
+
+    crearMalla();
+  </script>
+</body>
+</html>
